@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
 @dataclass
-class Pessoa:
+class Categoria:
     codigo : int
     nome : str
