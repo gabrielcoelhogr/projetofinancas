@@ -4,3 +4,10 @@ from models.conta_bancaria import ContaBancaria
 from models.banco import Banco
 from models.transacao import Transacao
 
+__all__ = [
+    "Pessoa",
+    "Categoria",
+    "Banco",
+    "ContaBancaria",
+    "Transacao"
+]
