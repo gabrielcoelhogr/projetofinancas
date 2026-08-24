@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 @dataclass
 class No:
-    """Nó da árvore binária"""
+    #"Nó da árvore binária#
     codigo: int      
     end: int     
     esquerda: 'No' = None

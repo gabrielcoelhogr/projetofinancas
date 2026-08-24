@@ -5,7 +5,7 @@ class ArvoreBinaria:
         self.raiz = None
 
     def inserir(self, codigo, posicao):
-        """Insere um novo nó na árvore"""
+        #Insere um novo nó na árvore#
         novo = No(codigo, posicao)
 
         # se árvore estiver sem nada o novo nó vira a raiz
@@ -30,7 +30,7 @@ class ArvoreBinaria:
             pai.direita = novo
 
     def buscar(self, codigo):
-        """Busca um nó pelo código. Retorna o nó ou Nulo."""
+        #Busca um nó pelo código. Retorna o nó ou Nulo.#
         atual = self.raiz
 
         while atual is not None:
