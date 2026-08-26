@@ -1,6 +1,6 @@
 from models.pessoa import Pessoa
 from models.categoria import Categoria
-from utils.arquivos import GerenciadorArquivo
+from utils.arquivo import GerenciadorArquivo
 
 print("=== TESTE DO GERENCIADOR DE ARQUIVO ===\n")
 
