@@ -1,0 +1,4 @@
+{"codigo": 1, "descricao": "Banco do Brasil"}
+{"codigo": 2, "descricao": "Caixa Econ\u00f4mica"}
+{"codigo": 3, "descricao": "Ita\u00fa"}
+{"codigo": 4, "descricao": "Santander"}
