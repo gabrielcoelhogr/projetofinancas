@@ -440,9 +440,16 @@ class SistemaTransacoes:
                 return conta
         return None
 
-    def incluir(self):
+    def _buscar_posicao_conta_na_lista(self, codigo_conta):
+        """Retorna a posição da conta na lista self.contas"""
+        for i, conta in enumerate(self.contas):
+            if conta.codigo == codigo_conta:
+                return i
+        return None
+
+    def lançar(self):
         try:
-            print("\n--- INCLUIR TRANSAÇÃO ---")
+            print("\n--- LANÇAR TRANSAÇÃO ---")
             codigo = int(input("Código: "))
             
             # Verificar se código já existe
@@ -473,7 +480,7 @@ class SistemaTransacoes:
             valor = float(input("Valor: "))
             
             # Pedir débito/crédito
-            print("Tipo de operação:")
+            print("\nTipo de operação:")
             print("D - Débito (saque)")
             print("C - Crédito (depósito)")
             debito_credito = input("Escolha (D/C): ").upper()
@@ -482,20 +489,48 @@ class SistemaTransacoes:
                 print("✗ Erro: Digite D ou C!")
                 return
             
-            # Criar objeto
+            # Criar objeto Transação
             transacao = Transacao(codigo, codigo_categoria, codigo_conta, data, valor, debito_credito)
             
-            # Adicionar à lista em memória
+            # ===== ATUALIZAR SALDO DA CONTA =====
+            saldo_anterior = conta.saldo
+            
+            if debito_credito == "D":
+                # Débito: SUBTRAI do saldo
+                conta.saldo -= valor
+                operacao = "Débito (Saque)"
+            else:
+                # Crédito: ADICIONA ao saldo
+                conta.saldo += valor
+                operacao = "Crédito (Depósito)"
+            
+            print(f"\n   Operação: {operacao}")
+            print(f"   Saldo anterior: R$ {saldo_anterior:.2f}")
+            print(f"   Saldo novo: R$ {conta.saldo:.2f}")
+            
+            # ===== GRAVAR TRANSAÇÃO =====
+            
+            # Adicionar transação à lista em memória
             self.transacoes.append(transacao)
             
-            # Gravar em arquivo
+            # Gravar transações em arquivo
             self.arquivo.gravar("data/transacoes.txt", self.transacoes, modo="w")
             
             # Inserir na árvore
             posicao = len(self.transacoes) - 1
             self.arvore.inserir(codigo, posicao)
             
-            print("✓ Transação adicionada com sucesso!\n")
+            # ===== GRAVAR CONTA ATUALIZADA =====
+            
+            # Atualizar conta na lista self.contas
+            posicao_conta = self._buscar_posicao_conta_na_lista(codigo_conta)
+            if posicao_conta is not None:
+                self.contas[posicao_conta] = conta
+            
+            # Gravar contas em arquivo
+            self.arquivo.gravar("data/contas.txt", self.contas, modo="w")
+            
+            print("✓ Transação lançada com sucesso!\n")
         
         except ValueError:
             print("✗ Erro: Valores inválidos!\n")
@@ -546,7 +581,7 @@ class SistemaTransacoes:
     def menu(self):
         while True:
             print("=== GERENCIAR TRANSAÇÕES ===")
-            print("1. Incluir")
+            print("1. Lançar Transação")
             print("2. Buscar")
             print("3. Listar")
             print("0. Voltar")
@@ -554,7 +589,7 @@ class SistemaTransacoes:
             opcao = input("Escolha: ")
             
             if opcao == "1":
-                self.incluir()
+                self.lançar()
             elif opcao == "2":
                 self.buscar()
             elif opcao == "3":
