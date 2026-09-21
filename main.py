@@ -578,22 +578,95 @@ class SistemaTransacoes:
                 print(f"{i}. [{transacao.codigo}] {transacao.data} | {categoria_nome} | R$ {transacao.valor:.2f} ({tipo})")
             print()
 
+    def excluir(self):
+        try:
+            print("\n--- EXCLUIR TRANSAÇÃO ---")
+            codigo = int(input("Código: "))
+
+            # Buscar transação
+            transacao_encontrada = None
+            posicao_transacao = -1
+
+            for i, transacao in enumerate(self.transacoes):
+                if transacao.codigo == codigo:
+                    transacao_encontrada = transacao
+                    posicao_transacao = i
+                    break
+
+            if transacao_encontrada is None:
+                print("✗ Transação não encontrada!\n")
+                return
+
+            # Mostrar dados
+            categoria = self._buscar_categoria_por_codigo(transacao_encontrada.codigo_categoria)
+            conta = self._buscar_conta_por_codigo(transacao_encontrada.codigo_conta)
+
+            tipo = "Débito (Saque)" if transacao_encontrada.debito_credito == "D" else "Crédito (Depósito)"
+
+            print(f"\n✓ Transação encontrada:")
+            print(f"  Categoria: {categoria.nome if categoria else 'N/A'}")
+            print(f"  Conta: #{conta.codigo if conta else 'N/A'}")
+            print(f"  Data: {transacao_encontrada.data}")
+            print(f"  Valor: R$ {transacao_encontrada.valor:.2f}")
+            print(f"  Tipo: {tipo}")
+
+            # Confirmar exclusão
+            confirmacao = input("\nDeseja realmente excluir? (S/N): ").upper()
+
+            if confirmacao != "S":
+                print("✗ Exclusão cancelada!\n")
+                return
+
+            # ===== REVERTER SALDO =====
+            if conta:
+                posicao_conta = self._buscar_posicao_conta_na_lista(conta.codigo)
+
+                if transacao_encontrada.debito_credito == "D":
+                    conta.saldo += transacao_encontrada.valor
+                else:
+                    conta.saldo -= transacao_encontrada.valor
+
+                if posicao_conta is not None:
+                    self.contas[posicao_conta] = conta
+
+            # ===== REMOVER TRANSAÇÃO =====
+            self.transacoes.pop(posicao_transacao)
+
+            # Rebuild da árvore para manter o índice consistente
+            self.arvore = ArvoreBinaria()
+            for indice, transacao in enumerate(self.transacoes):
+                self.arvore.inserir(transacao.codigo, indice)
+
+            # Gravar arquivo de transações
+            self.arquivo.gravar("data/transacoes.txt", self.transacoes, modo="w")
+
+            # Gravar arquivo de contas
+            self.arquivo.gravar("data/contas.txt", self.contas, modo="w")
+
+            print("✓ Transação excluída com sucesso!\n")
+
+        except ValueError:
+            print("✗ Erro: Código deve ser um número!\n")
+
     def menu(self):
         while True:
             print("=== GERENCIAR TRANSAÇÕES ===")
             print("1. Lançar Transação")
             print("2. Buscar")
             print("3. Listar")
+            print("4. Excluir")
             print("0. Voltar")
-            
+
             opcao = input("Escolha: ")
-            
+
             if opcao == "1":
                 self.lançar()
             elif opcao == "2":
                 self.buscar()
             elif opcao == "3":
                 self.listar()
+            elif opcao == "4":
+                self.excluir()
             elif opcao == "0":
                 break
             else:
