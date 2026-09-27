@@ -1,0 +1,2 @@
+{"codigo": 1, "codigo_categoria": 2, "codigo_conta": 1, "data": "2026-09-27", "valor": 4000.0, "debito_credito": "C"}
+{"codigo": 3, "codigo_categoria": 3, "codigo_conta": 2, "data": "2026-09-27", "valor": 80.0, "debito_credito": "D"}

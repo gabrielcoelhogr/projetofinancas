@@ -1,0 +1,2 @@
+{"codigo": 1, "codigo_banco": 1, "codigo_pessoa": 1, "descricao": "Conta Corrente", "saldo": 5000.0}
+{"codigo": 2, "codigo_banco": 2, "codigo_pessoa": 2, "descricao": "Poupanca", "saldo": 1920.0}

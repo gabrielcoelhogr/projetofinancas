@@ -1,4 +1,4 @@
 {"codigo": 1, "nome": "Alimentacao"}
-{"codigo": 2, "nome": "Transporte"}
-{"codigo": 3, "nome": "Saude"}
-{"codigo": 4, "nome": "Educacao"}
+{"codigo": 2, "nome": "Salario"}
+{"codigo": 3, "nome": "Transporte"}
+{"codigo": 4, "nome": "Alimentacao"}
