@@ -249,6 +249,11 @@ class SistemaTransacoes:
             # Gravar arquivo de contas
             self.arquivo.gravar("data/contas.txt", self.contas, modo="w")
 
+            # Reconstruir a árvore com as novas posições
+            self.arvore = ArvoreBinaria()
+            for i, t in enumerate(self.transacoes):
+                self.arvore.inserir(t.codigo, i)
+
             print("✓ Transação excluída com sucesso!\n")
 
         except ValueError:
